@@ -1,0 +1,30 @@
+{
+  "name": "dayreport",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "supervisor ./bin/www"
+  },
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "cookie-parser": "~1.4.3",
+    "debug": "~2.6.9",
+    "express": "~4.16.0",
+    "http-errors": "~1.6.2",
+    "moment": "^2.22.2",
+    "morgan": "~1.9.0",
+    "mysql": "^2.16.0",
+    "nodejs-websocket": "^1.7.2",
+    "pug": "2.0.0-beta11"
+  },
+  "devDependencies": {
+    "body-parser": "^1.18.3",
+    "consolidate": "^0.15.1",
+    "ejs": "^2.6.1",
+    "excel-export": "^0.5.1",
+    "exceljs": "^1.7.0",
+    "mysql": "^2.16.0",
+    "uuid": "^3.3.2",
+    "ws": "^6.2.0"
+  }
+}

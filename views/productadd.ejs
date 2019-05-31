@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>新增日报</title>
+</head>
+<body>
+<!--The content below is only a placeholder and can be replaced.-->
+
+<%- include public/header.ejs%>
+<div class="container-fluid">
+    <div class="row">
+        <%- include public/beside.ejs%>
+        <div class="col-sm-12">
+            <ol class="breadcrumb">
+                <li class="active">日报管理
+                </li>
+                <li class="active">新增日报
+                </li>
+            </ol>
+            <a href="/index" class="btn btn-default top_btn" >日报列表</a>
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="table-responsive input-form">
+                            <div class="left_part">
+                                <div>本日工作内容:
+                                    <a href="javascript:void(0)"  class="addinput">增加 +</a>
+                                    <a href="javascript:void(0)"  class="cutinput">删除 -</a>
+                                </div>
+                                <ul id="libox" style="padding: 0 !important;margin: 0 !important;">
+                                    <li>
+                                        <label for="contentli0">1、</label>
+                                        <input type="text" id="contentli0" name="content"  class="text_input">
+                                    </li>
+                                </ul>
+                                <!--<textarea name="content" id="content" cols="60" rows="8" style="outline: none;border-radius: 4px;border:1px solid #dbdbdb"></textarea>-->
+                            </div>
+                            <div class="right_part">
+                                <div>完成率 :</div>
+                                <ul id="libox1" style="padding: 0 !important;margin: 0 !important;">
+                                    <li class="rateli1">
+                                        <label for="rateli0">1、</label>
+                                        <input type="text" id="rateli0" name="rateli0"  class="rate_input"><span>%</span>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div style="margin-top: 30px">
+                                <span >未完成因素:</span>
+                                <input name="unfinish_reason" id="unfinish_reason" class="reason_input">
+                            </div>
+                            <div style="margin-top: 30px">
+                                <span>预计时间:</span>
+                                <input type="date" id="plan_time" class="text_input">
+                            </div>
+                            <button  class="btn btn-default addbtn"  id="sendbtn">完成</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
+<script>
+    $(function(){
+
+        var num = 0;
+        var libox = document.getElementById('libox');
+        var libox1 = document.getElementById('libox1');
+
+        $('.addinput').click(function (){
+            num ++;
+            let list = document.createElement('li');
+            list.innerHTML+= '<label for="contentli'+num+'">'+(num+1)+'、 </label><input type="text" id="contentli'+num+'"  class="text_input">' ;
+            libox.appendChild(list);
+            let list1 = document.createElement('li');
+            list1.innerHTML+= '<label for="rateli'+num+'">'+(num+1)+'、 </label><input type="text" id="rateli'+num+'"  class="rate_input"><span>%</span>' ;
+            libox1.appendChild(list1);
+        })
+
+        $('.cutinput').click(function(){
+
+            if(num>0){
+                num --;
+                libox.removeChild(libox.lastChild);
+                libox1.removeChild(libox1.lastChild);
+            }
+
+        })
+
+        $('#sendbtn').click(function(){
+
+            let content='',rate='';
+            let unfinish_reason = '';
+            let plan_time = '';
+            if($('#unfinish_reason').val()){
+                unfinish_reason = $('#unfinish_reason').val();
+            }
+            if($('#plan_time').val()){
+                plan_time = $('#plan_time').val();
+            }
+            for(var i=0;i<(num+1);i++){
+                if ($('#contentli'+i).val() == null){
+                    continue;
+                }
+                if ($('#rateli'+i).val() == null){
+                    continue;
+                }
+                if($('#contentli'+i).val().length>0){
+                    content += (i+1)+'、'+$('#contentli'+i).val()+';';
+                }
+                if($('#rateli'+i).val().length>0){
+                    rate += (i+1)+'、'+$('#rateli'+i).val()+'%;';
+                }
+            }
+            let param ={
+                content: content,
+                finish_rate:rate,
+                unfinish_reason:unfinish_reason,
+                plan_time:plan_time
+            }
+            if(content.length>0){
+                $.ajax({
+                    type: "POST",
+                    url: rootPath+'/doAdd',
+                    data:param,
+                    success:function(res){
+                       let data = JSON.parse(res);
+                       if(data&&data.code==200){
+                           location.href='/index'
+                       }
+                    }
+                })
+            }
+        })
+
+    })
+
+</script>
