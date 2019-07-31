@@ -16,15 +16,18 @@ if (environment=='test'){
 
 }else if(environment=='prod'){
 
-    databaseName = 'lai_base'
+    databaseName = 'lai_style'
 
 }
 
 var pool = mysql.createPool({
-    host: 'hostname',
+    // host: 'hostname',
+	host: 'rm-wz9ggr16nm40w0cmf7o.mysql.rds.aliyuncs.com',
     user: 'root',
-    password: 'lai_style',
-    port: '3000',
+    // password: 'lai_style',
+	password: 'zhong_yuan_2018',
+    // port: '3000',
+	port:'3306',
     database: databaseName,
     // 最大连接数，默认为10
     connectionLimit: 10,
@@ -117,6 +120,7 @@ app.get('/back/dayreport/all/list',function(req,res){
             if(error){
                 res.json({data:null,message:'请求失败',code:400})
             }else{
+
                 res.json({data:result,message:'获取成功',code:200});
 
             }
@@ -173,9 +177,13 @@ app.post('/back/dayreport/add',function(req,res){
         param.push(para.plan_time);
         pool.getConnection(function(err, connection) {
             connection.query(addcode, param, function(error, result){
+
                 if(error){
+
                     res.json({data:null,message:'请求失败',code:400})
+
                 }else{
+
                     res.json({data:result,message:'新增成功',code:200});
 
                 }
@@ -257,4 +265,4 @@ app.get('/back/dayreport/export', function(req, res, next) {
     })
 });
 
-app.listen(9999)
+app.listen(8800)
